@@ -1,0 +1,70 @@
+project_name: sp
+service_name: ls
+bucket_label_name: label
+statements:
+  - sid: DynamodbRead
+    actions: ["s3:*"]
+    effect: "Allow"
+    resources:
+      ["arn:aws:s3:::${name_prefix}sp-ls-${user_name}-${branch_name}-label"]
+  - sid: Microservice
+    actions:
+      [
+        "eks:*",
+        "rds:*",
+        "elasticache:*",
+        "ec2:*",
+        "autoscaling:*",
+        "autoscaling-plans:*",
+        "application-autoscaling:*",
+        "logs:*",
+        "cloudwatch:*",
+        "ssm:*",
+        # "iam:*",
+        "kms:*",
+        "elasticloadbalancing:*",
+        "iam:ListAttachedRolePolicies",
+        "iam:CreateServiceLinkedRole",
+        "iam:PassRole",
+        "s3:*",
+      ]
+      # "iam:CreatePolicy", "kms:DescribeKey", "elasticloadbalancing:CreateLoadBalancer", "application-autoscaling:RegisterScalableTarget"
+      # "cloudwatch:PutMetricStream",
+      # "logs:CreateLogDelivery",
+      # "logs:CreateLogStream",
+      # "cloudwatch:PutMetricData",
+      # "logs:UpdateLogDelivery",
+      # "logs:CreateLogGroup",
+      # "logs:PutLogEvents",
+      # "cloudwatch:ListMetrics"
+    effect: "Allow"
+    resources: ["*"]
+  - sid: Route53RecordsFull
+    actions: [
+        # first trial
+        "route53:ChangeResourceRecordSets",
+        "route53:ListResourceRecordSets",
+        "route53:GetHostedZone",
+        "route53:GetHostedZoneCount",
+        "route53:ListHostedZones",
+        "route53:ListHostedZonesByName",
+        "route53:ListHostedZonesByVPC",
+        "route53:ListTagsForResource",
+        # required
+        "route53:GetChange",
+      ]
+    effect: "Allow"
+    resources: ["*"]
+  - sid: AcmFull
+    actions: ["acm:*"]
+    effect: "Allow"
+    resources: ["*"]
+
+  # https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonEKSClusterPolicy.html
+  # https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonEKSServicePolicy.html
+  # https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonEKSVPCResourceController.html
+  # https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonEKSWorkerNodePolicy.html
+  # https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonEKS_CNI_Policy.html
+  # https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonEC2ContainerRegistryReadOnly.html
+  # https://docs.aws.amazon.com/eks/latest/userguide/security_iam_id-based-policy-examples.html
+  # https://docs.aws.amazon.com/eks/latest/userguide/security-iam-awsmanpol.html

@@ -1,0 +1,18 @@
+project_name: sp
+service_name: be
+deployment_type: microservice
+statements:
+      - sid: DynamodbFull
+        actions: ["dynamodb:*"]
+        effect: "Allow"
+        resources:
+              [
+                    "arn:aws:dynamodb:*:*:table/${name_prefix}sp-${user_name}-${branch_name}-*",
+              ]
+      - sid: BucketPicturesFull
+        actions: ["s3:*"]
+        effect: "Allow"
+        resources:
+              [
+                    "arn:aws:s3:::${name_prefix}sp-${user_name}-${branch_name}-${bucket_picture_name}",
+              ]

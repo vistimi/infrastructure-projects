@@ -1,0 +1,17 @@
+*.env
+
+# terraform
+.terraform*
+*.tfstate*
+*tfvars
+*override*
+
+# ssh
+*.pem
+
+# rover
+rover.svg
+
+# grpcurl
+grpcurl*
+grpc-client-cli

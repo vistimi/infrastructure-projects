@@ -1,0 +1,92 @@
+statements:
+  - sid: Microservice
+    actions:
+      [
+        "ecs:*",
+        "ec2:*",
+        "autoscaling:*",
+        "autoscaling-plans:*",
+        "application-autoscaling:*",
+        "logs:*",
+        "cloudwatch:*",
+        "ssm:*",
+        "kms:*",
+        "elasticloadbalancing:*",
+        "iam:*",
+        # "iam:ListAttachedRolePolicies",
+        # "iam:CreateServiceLinkedRole",
+        # "iam:*Role",
+        # "iam:*RolePolicy",
+        # "iam:CreatePolicy",
+        # "iam:DeletePolicy",
+      ]
+      # "iam:CreatePolicy", "kms:DescribeKey", "elasticloadbalancing:CreateLoadBalancer", "application-autoscaling:RegisterScalableTarget"
+      # "cloudwatch:PutMetricStream",
+      # "logs:CreateLogDelivery",
+      # "logs:CreateLogStream",
+      # "cloudwatch:PutMetricData",
+      # "logs:UpdateLogDelivery",
+      # "logs:CreateLogGroup",
+      # "logs:PutLogEvents",
+      # "cloudwatch:ListMetrics"
+      # "ssm:GetParameter"
+    effect: "Allow"
+    resources: ["*"]
+  - sid: Route53RecordsFull
+    actions: [
+        # first trial
+        "route53:ChangeResourceRecordSets",
+        "route53:ListResourceRecordSets",
+        "route53:GetHostedZone",
+        "route53:GetHostedZoneCount",
+        "route53:ListHostedZones",
+        "route53:ListHostedZonesByName",
+        "route53:ListHostedZonesByVPC",
+        "route53:ListTagsForResource",
+        # required
+        "route53:GetChange",
+      ]
+    effect: "Allow"
+    resources: ["*"]
+  - sid: AcmFull
+    actions: ["acm:*"]
+    effect: "Allow"
+    resources: ["*"]
+  - sid: Env
+    actions: ["s3:*"]
+    effect: "Allow"
+    resources:
+      [
+        "arn:aws:s3:::${name_prefix}${project_name}-${service_name}-${user_name}-${branch_name}-${bucket_env_name}",
+      ]
+  - sid: EnvObject
+    actions: ["s3:*"]
+    effect: "Allow"
+    resources:
+      [
+        "arn:aws:s3:::${name_prefix}${project_name}-${service_name}-${user_name}-${branch_name}-env/*",
+      ]
+  - sid: EcrRead
+    actions:
+      [
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage",
+      ]
+    effect: "Allow"
+    resources:
+      [
+        "arn:aws:ecr:*:*:repository/${name_prefix}${project_name}-${service_name}-${branch_name}",
+      ]
+  - sid: EcrPublicRead
+    actions:
+      [
+        "ecr-public:GetAuthorizationToken",
+        "ecr-public:BatchCheckLayerAvailability",
+      ]
+    effect: "Allow"
+    resources:
+      [
+        "arn:aws:ecr-public:::repository/${name_prefix}${project_name}-${service_name}-${branch_name}",
+      ]

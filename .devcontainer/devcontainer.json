@@ -1,0 +1,40 @@
+{
+	"name": "Alpine",
+	"build": {
+		"dockerfile": "../Dockerfile.bin",
+		"args": {
+			"VARIANT": "mcr.microsoft.com/devcontainers/base:alpine-3.16",
+			"DOCKER_BUILDKIT": "0"
+		},
+		"target": "runner"
+	},
+	// "initializeCommand": "export $(grep -v '^#' .devcontainer/devcontainer.env | xargs -0) && make aws-auth && aws ecr get-login-password --region ${AWS_REGION_NAME} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION_NAME}.amazonaws.com",
+	// "image": "401582117818.dkr.ecr.us-east-1.amazonaws.com/infrastructure-modules-trunk-bin:latest",
+	"runArgs": [
+		"--env-file",
+		".devcontainer/devcontainer.env"
+	],
+	"mounts": [
+		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+	],
+	"onCreateCommand": "go install github.com/cweill/gotests/gotests@latest && go install github.com/fatih/gomodifytags@latest && go install github.com/josharian/impl@latest && go install github.com/haya14busa/goplay/cmd/goplay@latest && go install github.com/go-delve/delve/cmd/dlv@latest && go install honnef.co/go/tools/cmd/staticcheck@latest && go install golang.org/x/tools/gopls@latest && go install -v golang.org/x/tools/cmd/goimports@latest && go install github.com/rogpeppe/godef@latest",
+	"postStartCommand": "export $(grep -v '^#' .devcontainer/devcontainer.env | xargs) && make aws-auth && tflint --init && sudo go mod download",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"yzhang.markdown-all-in-one",
+				"golang.go",
+				"shakram02.bash-beautify",
+				"shd101wyy.markdown-preview-enhanced",
+				"premparihar.gotestexplorer",
+				"hashicorp.terraform",
+				"bierner.markdown-emoji",
+				"ms-vscode.makefile-tools",
+				"ms-azuretools.vscode-docker",
+				"IronGeek.vscode-env",
+				"github.vscode-github-actions",
+				"redhat.vscode-yaml"
+			]
+		}
+	}
+}
